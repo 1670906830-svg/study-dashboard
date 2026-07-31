@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>备考工作台</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-title">备考工作台</div>
+  </div>
+</nav>
+
+<!-- Today -->
+<div class="page active" id="pageToday">
+  <div class="split-layout">
+    <div class="split-left">
+      <div class="hero-block">
+        <div class="hero-title" id="todayDate"></div>
+        <div class="hero-sub" id="todaySub"></div>
+      </div>
+      <div class="section-label">今日习惯</div>
+      <div class="card-list" id="todayHabits"></div>
+      <div class="section-label">今日课程</div>
+      <div class="card-list" id="todayCourses"></div>
+    </div>
+    <div class="split-right">
+      <div class="section-label">整体进度</div>
+      <div id="statsPanel"></div>
+      <div class="section-label">各科进度</div>
+      <div id="statsByCat"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Habits -->
+<div class="page" id="pageHabits">
+  <div class="split-layout">
+    <div class="split-left">
+      <div class="hero-block">
+        <div class="hero-title" id="habitsDate"></div>
+        <div class="hero-sub" id="habitsSub"></div>
+      </div>
+      <div class="card-list" id="habitsList"></div>
+    </div>
+    <div class="split-right">
+      <div class="section-label">说明</div>
+      <div class="info-card">
+        <div class="info-text">
+          每日：晨读 / 练字 / 喝水 / 新闻联播<br>
+          隔日：健身<br>
+          点击圆环打卡
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Calendar -->
+<div class="page" id="pageCalendar">
+  <div class="split-layout">
+    <div class="split-left">
+      <div class="cal-bar">
+        <div class="cal-nav">
+          <button class="cal-btn" id="calPrev">&lt;</button>
+          <span class="cal-title" id="calTitle"></span>
+          <button class="cal-btn" id="calNext">&gt;</button>
+        </div>
+        <div class="cal-view-group">
+          <button class="view-btn active" data-view="month">月</button>
+          <button class="view-btn" data-view="week">周</button>
+        </div>
+      </div>
+      <table class="cal-table" id="calTable">
+        <thead>
+          <tr>
+            <th class="col-date">日期</th>
+            <th class="col-day">周</th>
+            <th class="col-xc">行测</th>
+            <th class="col-sl">申论</th>
+            <th class="col-pct">进度</th>
+          </tr>
+        </thead>
+        <tbody id="calBody"></tbody>
+      </table>
+    </div>
+    <div class="split-right">
+      <div class="section-label">课程完成度</div>
+      <div id="calRightPanel">
+        <div id="calCourseList"></div>
+        <div class="section-label" style="margin-top:16px;">日程详情</div>
+        <div class="card-list" id="calRightDetail"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Courses -->
+<div class="page" id="pageCourses">
+  <div class="split-layout">
+    <div class="split-left">
+      <div class="hero-block">
+        <div class="hero-title">课程总览</div>
+        <div class="hero-sub">按课程统计完成进度</div>
+      </div>
+      <div class="pill-tabs" id="courseTabs">
+        <button class="pill active" data-cat="all">全部</button>
+        <button class="pill" data-cat="行测">行测</button>
+        <button class="pill" data-cat="申论">申论</button>
+      </div>
+      <div style="display:flex;gap:6px;margin-bottom:8px;">
+        <button class="btn-pri" onclick="showAddCourseModal()" style="flex:1;">+ 新课程</button>
+        <button class="btn-pri" onclick="importCourses()" style="flex:1;background:#3a3a3c;">导入 Excel</button>
+      </div>
+      <div id="courseGrid"></div>
+    </div>
+    <div class="split-right">
+      <div class="section-label">统计数据</div>
+      <div id="statsBars"></div>
+      <div class="section-label">备考建议</div>
+      <div class="info-card" id="tipsCard"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Stats -->
+<div class="page" id="pageStats">
+  <div class="split-layout">
+    <div class="split-left">
+      <div class="hero-block">
+        <div class="hero-title">数据</div>
+        <div class="hero-sub">正确率趋势</div>
+      </div>
+      <div class="toolbar">
+        <div class="pill-tabs" id="rateTabs">
+          <button class="pill active" data-rcat="all">全部</button>
+          <button class="pill" data-rcat="行测">行测</button>
+          <button class="pill" data-rcat="申论">申论</button>
+        </div>
+        <div class="rate-input-row">
+          <input type="number" id="rateValue" placeholder="正确率 %" min="0" max="100">
+          <input type="text" id="rateNote" placeholder="备注">
+          <button class="btn-pri" id="rateSubmit">录入</button>
+        </div>
+      </div>
+      <div class="chart-box" id="rateChart"></div>
+    </div>
+    <div class="split-right">
+      <div class="section-label">各科完成进度</div>
+      <div id="statsPanelRight"></div>
+      <div class="section-label">备考建议</div>
+      <div class="info-card" id="statsTips"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Tab Bar -->
+<div class="tab-bar" id="tabBar">
+  <button class="tab-item active" data-tab="today">今日</button>
+  <button class="tab-item" data-tab="habits">习惯</button>
+  <button class="tab-item" data-tab="calendar">日历</button>
+  <button class="tab-item" data-tab="courses">课程</button>
+  <button class="tab-item" data-tab="stats">数据</button>
+</div>
+
+<script src="/app.js"></script>
+</body>
+</html>
